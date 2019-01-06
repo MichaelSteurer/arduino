@@ -1,0 +1,17 @@
+body {
+    text-align: center;
+}
+
+.controller {
+    height:15vh; 
+    font-size:2rem;
+}
+
+#wrapper {
+    display:flex; 
+    flex-direction:column; 
+    align-items:stretch; 
+    width:100%; 
+    height:60vh; 
+    justify-content:space-around;
+}
