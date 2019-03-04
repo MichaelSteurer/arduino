@@ -1,3 +1,4 @@
+#include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
@@ -39,6 +40,28 @@ void CustomNetwork::wifiConnect()
     this->logger_.debugln(const_cast<char*>(WiFi.localIP().toString().c_str()));
 }
 
+//-----------------------------------------------------------------------------
+void CustomNetwork::wifiPost(const char* address, const char* payload)
+{
+    this->logger_.debugln("");
+    this->logger_.debug("POST data to ");
+    this->logger_.debugln(address);
+
+    if (WiFi.status() != WL_CONNECTED) {
+        wifiConnect();
+    }
+
+    HTTPClient http;
+    http.begin(address);
+    http.addHeader("Content-Type", "text/plain");
+    
+    int respCode = http.POST(payload);
+    String respPayload = http.getString();
+    
+    http.end();
+}
+
+//-----------------------------------------------------------------------------
 void CustomNetwork::mqttSetup(PubSubClient* mqtt_client, const char* server, int port, const char* id, const char* user, const char* password)
 {
     this->mqtt_client_ = mqtt_client;
@@ -106,5 +129,4 @@ void CustomNetwork::mqttSubscribe(const char* topic)
 void CustomNetwork::mqttSetCallback(std::function<void(char*, uint8_t*, unsigned int)> callback)
 {
     this->mqtt_client_->setCallback(callback);
-
 }

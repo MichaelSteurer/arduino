@@ -26,6 +26,7 @@ class CustomNetwork {
         
         void wifiSetup(const char* ssid, const char* password);
         void wifiConnect();
+        void wifiPost(const char* address, const char* payload);
 
         void mqttSetup(PubSubClient* mqtt_client, const char* server, int port, const char* id, const char* user, const char* password);
         void mqttConnect();
