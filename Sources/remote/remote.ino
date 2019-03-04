@@ -22,13 +22,7 @@ CustomHelpers custom_helpers_(DEBUG);
 void setup()
 {
     custom_network_.wifiSetup(WIFI_SSID, WIFI_PASSWORD);
-    custom_network_.wifiConnect();
-
     custom_network_.mqttSetup(&mqtt_client_, MQTT_SERVER, MQTT_PORT, MQTT_ID, MQTT_USER, MQTT_PASSWORD);
-    custom_network_.mqttConnect();
-
-    custom_network_.mqttSetCallback(mqtt_callback);
-    custom_network_.mqttSubscribe(TOPIC_IN);
 
     irsend_.begin();
 }
@@ -52,7 +46,11 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
 //-----------------------------------------------------------------------------
 void loop()
 {
-    if (!custom_network_.mqttConnected())
+    if (!custom_network_.mqttConnected()) {
         custom_network_.mqttConnect();
+        custom_network_.mqttSetCallback(mqtt_callback);
+        custom_network_.mqttSubscribe(TOPIC_IN);
+    }
+
     custom_network_.mqttLoop();
 }
