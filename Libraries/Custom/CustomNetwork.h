@@ -2,6 +2,13 @@
 #define CustomNetwork_h
 
 #include <Arduino.h>
+
+#include <ESP8266HTTPClient.h>
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
+#include <WiFiClientSecureBearSSL.h>
+
+#include <CustomHelpers.h>
 #include <CustomLogger.h>
 
 
@@ -25,12 +32,15 @@ class CustomNetwork {
         CustomNetwork();
         
         void wifiSetup(const char* ssid, const char* password);
-        void wifiConnect();
-        void wifiPost(const char* address, const char* payload);
+        bool wifiConnect();
+        bool wifiConnect(int timeout);
+        void wifiDisconnect();
+        int wifiPost(const char* address, const char* payload);
 
         void mqttSetup(PubSubClient* mqtt_client, const char* server, int port, const char* id, const char* user, const char* password);
         void mqttConnect();
         bool mqttConnected();
+        void mqttDisconnect();
         void mqttLoop();
         void mqttPublish(const char* topic, const char* message);
         void mqttSubscribe(const char* topic);
