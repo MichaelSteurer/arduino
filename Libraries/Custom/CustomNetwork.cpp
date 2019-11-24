@@ -156,6 +156,7 @@ void CustomNetwork::mqttLoop() {
 
 //-----------------------------------------------------------------------------
 void CustomNetwork::mqttPublish(const char* topic, const char* message) {
+    this->mqttConnect();
     this->mqtt_client_->publish(topic, message);
 }
 

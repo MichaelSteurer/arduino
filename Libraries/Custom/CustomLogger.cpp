@@ -4,25 +4,25 @@
 
 
 //-----------------------------------------------------------------------------
-CustomLogger::CustomLogger(bool enabled) 
-{
+CustomLogger::CustomLogger(bool enabled) {
     Serial.begin(115200);
-    while (!Serial)
+    while (!Serial) {
         delay(50);
+    }
 
     this->enabled_ = enabled;
 }
 
 //-----------------------------------------------------------------------------
-void CustomLogger::debug(const char* msg)
-{
-    if(this->enabled_)
+void CustomLogger::debug(const char* msg) {
+    if(this->enabled_) {
         Serial.print(msg);
+    }
 }
 
 //-----------------------------------------------------------------------------
-void CustomLogger::debugln(const char* msg)
-{
-    if(this->enabled_)
+void CustomLogger::debugln(const char* msg) {
+    if(this->enabled_) {
         Serial.println(msg);
+    }
 }

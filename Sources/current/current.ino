@@ -1,31 +1,37 @@
 #include <Wire.h>
 #include <Adafruit_INA219.h>
+#include <PubSubClient.h>
+
+#include <CustomNetwork.h>
+#include <CustomHelpers.h>
+
+#include "constants.h"
+
 
 Adafruit_INA219 sensor219;
 
-void setup(void) 
-{  
-    Serial.begin(115200);
+WiFiClient wifi_client_;
+PubSubClient mqtt_client_(wifi_client_);
+
+CustomLogger logger_(DEBUG);
+CustomNetwork custom_network_(DEBUG);
+
+
+void setup(void) {  
+    custom_network_.wifiSetup(WIFI_SSID, WIFI_PASSWORD);
+    custom_network_.mqttSetup(&mqtt_client_, MQTT_SERVER, MQTT_PORT, MQTT_ID, MQTT_USER, MQTT_PASSWORD);
+
     sensor219.begin();
     sensor219.setCalibration_16V_400mA();
 }
 
-void loop(void) 
-{
-    float busVoltage = 0;
-    float current = 0; // Measure in milli amps
-    float power = 0;
 
-    busVoltage = sensor219.getBusVoltage_V();
-    current = sensor219.getCurrent_mA();
-    power = busVoltage * (current/1000);
+void loop(void) {
+    float busVoltage = sensor219.getBusVoltage_V();
+    float current = sensor219.getCurrent_mA();
 
-    Serial.print(current); 
-    Serial.print(" x ");
-    Serial.print(busVoltage); 
-    Serial.print(" = ");
-    Serial.print(power); 
-    Serial.println(""); 
+    String payload = String(current) + "; " + String(busVoltage);
+    logger_.debugln(payload.c_str());
 
-  delay(500);
+    custom_network_.mqttPublish(TOPIC, payload.c_str());
 }
