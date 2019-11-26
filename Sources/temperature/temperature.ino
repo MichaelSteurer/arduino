@@ -19,8 +19,7 @@ CustomNetwork custom_network_(DEBUG);
 
 
 //-----------------------------------------------------------------------------
-void setup()
-{
+void setup() {
     custom_network_.wifiSetup(WIFI_SSID, WIFI_PASSWORD);
     // dht_.begin();
 }
@@ -41,15 +40,13 @@ void loop() {
         return;
     }
  
-    custom_network_.wifiConnect();
-
     h = (int)(h * 100) / 100.0;
     t = (int)(t * 100) / 100.0;
 
     String payload = String(
         "{"
         "  'n': 'bedroom',"
-        "  't': 'secure',"
+        "  't': '" + String(TOKEN) + "',"
         "  'p': {"
         "    't':" + String(t) + "," 
         "    'h':" + String(h) + ""
@@ -60,8 +57,7 @@ void loop() {
     logger_.debugln(String("payload: " + payload).c_str());
 
     custom_network_.wifiPost(REQUEST_URL, payload.c_str());
-
-    custom_network_.wifiDisconnect();
-    // delay(10 * 60 * 1000);
-    ESP.deepSleep(60 * 1000);
+    
+    ESP.deepSleep(60 * DEEPSLEEP_MINUTE);
+    delay(100);
 }
