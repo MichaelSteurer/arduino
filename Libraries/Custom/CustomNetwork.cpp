@@ -63,9 +63,15 @@ int CustomNetwork::wifiPost(const char* address, const char* payload) {
     this->logger_.debug("POST data to ");
     this->logger_.debugln(address);
 
-    if (WiFi.status() != WL_CONNECTED) {
-        wifiConnect();
+    for(int i = 0; i < 4; i++) {
+        if (WiFi.status() != WL_CONNECTED) {
+            wifiConnect();
+            delay(4 * 1000);
+        } else {
+            break;
+        }
     }
+
 
     WiFiClientSecure *client = new WiFiClientSecure;
 
@@ -87,20 +93,26 @@ int CustomNetwork::wifiPost(const char* address, const char* payload) {
     const uint8_t fingerprint[20] = {};
     client->setFingerprint(fingerprint);
 
-    HTTPClient http;
-    http.begin(*client, address);
-    http.addHeader("Content-Type", "application/json");
-    int resp_code = http.POST(payload);
+    int resp_code = 0;
+    for(int i = 0; i < 4; i++) {
+        HTTPClient http;
+        http.begin(*client, address);
+        http.addHeader("Content-Type", "application/json");
+        resp_code = http.POST(payload);
+        String resp_payload = http.getString();
+        http.end();
 
-    if (resp_code > 0) {
-        String respPayload = http.getString();
-        this->logger_.debug("Response: ");
-        this->logger_.debugln(respPayload.c_str());
-
-    } else {
-        Serial.printf("[HTTPS] GET... failed, error: %s\n", http.errorToString(resp_code).c_str());
+        if (resp_code > 0) {
+            this->logger_.debug("[HTTPS] Response: ");
+            this->logger_.debugln(resp_payload.c_str());
+            break;
+        } else {
+            this->logger_.debug("[HTTPS] GET... failed, error: ");
+            this->logger_.debugln(http.errorToString(resp_code).c_str());
+        }
+        delay(4 * 1000);
     }
-    http.end();
+
     return resp_code;
 }
 
