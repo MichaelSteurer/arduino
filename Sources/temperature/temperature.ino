@@ -39,7 +39,7 @@ void loop() {
         delay(2 * 1000);
         return;
     }
- 
+
     h = (int)(h * 100) / 100.0;
     t = (int)(t * 100) / 100.0;
 
@@ -58,6 +58,6 @@ void loop() {
 
     custom_network_.wifiPost(REQUEST_URL, payload.c_str());
     
-    ESP.deepSleep(60 * DEEPSLEEP_MINUTE);
+    ESP.deepSleep(30 * DEEPSLEEP_MINUTE);
     delay(100);
 }
