@@ -30,6 +30,8 @@ void loop() {
     // float h = dht_.readHumidity();
     // float t = dht_.readTemperature();
 
+    String mac = custom_network_.getMacAddress();
+
     float h = 0;
     sensors.requestTemperatures();
     float t = sensors.getTempCByIndex(0);
@@ -45,7 +47,7 @@ void loop() {
 
     String payload = String(
         "{"
-        "  'n': 'bedroom',"
+        "  'n': '" + mac + "',"
         "  't': '" + String(TOKEN) + "',"
         "  'p': {"
         "    't':" + String(t) + "," 

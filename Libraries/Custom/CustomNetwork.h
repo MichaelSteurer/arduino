@@ -35,6 +35,8 @@ class CustomNetwork {
         bool wifiConnect();
         bool wifiConnect(int timeout);
         void wifiDisconnect();
+        String getMacAddress();
+
         int wifiPost(const char* address, const char* payload);
 
         void mqttSetup(PubSubClient* mqtt_client, const char* server, int port, const char* id, const char* user, const char* password);

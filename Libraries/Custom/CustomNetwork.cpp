@@ -58,6 +58,16 @@ void CustomNetwork::wifiDisconnect() {
 }
 
 //-----------------------------------------------------------------------------
+String CustomNetwork::getMacAddress() {
+    String mac_address = WiFi.macAddress();
+
+    this->logger_.debug("Retrieved Mac Address: ");
+    this->logger_.debugln(mac_address.c_str());
+
+    return mac_address;
+}
+
+//-----------------------------------------------------------------------------
 int CustomNetwork::wifiPost(const char* address, const char* payload) {
     this->logger_.debugln("");
     this->logger_.debug("POST data to ");
