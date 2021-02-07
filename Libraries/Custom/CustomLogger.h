@@ -14,6 +14,7 @@ class CustomLogger {
         
         void debug(const char* msg);
         void debugln(const char* msg);
+        void debug(const char** msg);
 };
 
 #endif

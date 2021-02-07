@@ -82,9 +82,16 @@ int CustomNetwork::wifiPost(const char* address, const char* payload) {
         }
     }
 
+    WiFiClient client;
 
-    WiFiClientSecure *client = new WiFiClientSecure;
-
+    bool secureHTTPRequest = String(address).indexOf("https:") > 0;
+    if (secureHTTPRequest) {
+        WiFiClientSecure *clientSecure = new WiFiClientSecure;
+        const uint8_t fingerprint[20] = {};
+        clientSecure->setFingerprint(fingerprint);
+        client = *clientSecure;
+    }
+    
     /*
     We need to disable the ssl fingerprint verification in 
     the library of WiFiClientSecureBearSSL.cpp. Otherwise we
@@ -100,13 +107,12 @@ int CustomNetwork::wifiPost(const char* address, const char* payload) {
     -------8<-------8<-------8<-------8<-------8<-------
     */
 
-    const uint8_t fingerprint[20] = {};
-    client->setFingerprint(fingerprint);
-
+    
     int resp_code = 0;
     for(int i = 0; i < 4; i++) {
         HTTPClient http;
-        http.begin(*client, address);
+        http.begin(client, address);    
+
         http.addHeader("Content-Type", "application/json");
         resp_code = http.POST(payload);
         String resp_payload = http.getString();

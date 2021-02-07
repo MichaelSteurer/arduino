@@ -21,6 +21,15 @@ void CustomLogger::debug(const char* msg) {
 }
 
 //-----------------------------------------------------------------------------
+void CustomLogger::debug(const char* msg[]) {
+    int array_length = sizeof(msg);
+    Serial.print(array_length);
+    for (int i=0; i < array_length; i++) {
+        debug(msg[i]);
+    }
+}
+
+//-----------------------------------------------------------------------------
 void CustomLogger::debugln(const char* msg) {
     if(this->enabled_) {
         Serial.println(msg);
