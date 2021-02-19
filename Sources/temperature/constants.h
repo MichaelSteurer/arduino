@@ -12,7 +12,6 @@ const char* REQUEST_URL = "";
 const char* TOKEN = "";
 
 uint8_t DATA_PIN = D1;
-int DEEPSLEEP_MINUTE = 60e6;
 
 const bool DEBUG = true;
 
