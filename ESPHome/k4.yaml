@@ -1,0 +1,22 @@
+# status only
+esphome:
+  name: k4
+  platform: ESP8266
+  board: nodemcuv2
+
+logger:
+  level: DEBUG
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_passwd
+
+api:
+
+ota:
+  safe_mode: true
+  password: !secret ota
+
+binary_sensor:
+  - platform: status
+    name: "k4_status"

@@ -1,0 +1,26 @@
+# motion sensor
+esphome:
+  name: k3
+  platform: ESP8266
+  board: nodemcuv2
+
+logger:
+  # level: DEBUG
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_passwd
+
+api:
+
+ota:
+  safe_mode: true
+  password: !secret ota
+
+binary_sensor:
+  - platform: status
+    name: "k3_status"
+  - platform: gpio
+    pin: D4
+    name: "k3_motion"
+    device_class: motion

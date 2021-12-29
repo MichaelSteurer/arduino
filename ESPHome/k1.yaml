@@ -1,0 +1,45 @@
+#temperature and motion
+esphome:
+  name: k1
+  platform: ESP8266
+  board: nodemcuv2
+  on_boot:
+    priority: -10
+    then:
+      - switch.turn_off: annoyingled
+
+logger:
+  # level: DEBUG
+
+wifi: # write credentials to a dedicated secrets.yaml file
+  ssid: !secret wifi_ssid
+  password: !secret wifi_passwd
+
+api: # write sensor levels directly to home-assistant
+
+ota: # allow OTA updates
+  safe_mode: true
+  password: !secret ota
+
+dallas:
+  - pin: D2
+
+sensor:
+  - platform: dallas
+    index: 0
+    name: "k1_temperature_dallas"
+
+binary_sensor:
+  - platform: gpio
+    pin: D1
+    name: "k1_motion"
+    device_class: motion
+  - platform: status # report connection status to home-assistant
+    name: "k1_status"
+
+switch:
+  - platform: gpio
+    pin: GPIO2
+    name: ledstripwemosled
+    inverted: true
+    id: annoyingled

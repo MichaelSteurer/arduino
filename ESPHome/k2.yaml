@@ -1,0 +1,35 @@
+# temperature sensor with deep sleep
+esphome:
+  name: k2
+  platform: ESP8266
+  board: nodemcuv2
+
+logger:
+  # level: DEBUG
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_passwd
+
+api:
+
+ota:
+  safe_mode: true
+  password: !secret ota
+
+deep_sleep:
+  run_duration: 10s
+  sleep_duration: 10min
+  id: deep_sleep_1
+
+binary_sensor:
+  - platform: status
+    name: "k2_status"
+
+dallas:
+  - pin: GPIO4
+
+sensor:
+  - platform: dallas
+    index: 0
+    name: "k2_temperature_dallas"
